@@ -1,4 +1,2 @@
-export type CacheEntry<T> = {
-  value: T;
-  expiresAt?: number;
-};
+export { MemoryCache } from "./memoryCache";
+export type { CacheEntry, CacheHit } from "./memoryCache";
