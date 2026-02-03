@@ -60,6 +60,13 @@ main {
   background: #f8fafc;
 }
 
+.badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .card-main {
   display: grid;
   gap: 16px;
@@ -90,6 +97,9 @@ main {
 }
 
 .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 4px 10px;
   border-radius: 999px;
   background: #0f63ff;
@@ -98,6 +108,33 @@ main {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.badge-status {
+  background: #1f6feb;
+}
+
+.badge-status.is-live {
+  background: #1f9d55;
+}
+
+.badge-status.is-cached {
+  background: #f59f00;
+}
+
+.badge-status.is-loading {
+  background: #0f63ff;
+}
+
+.badge-status.is-error {
+  background: #e03131;
+}
+
+.badge-updated {
+  background: #e9eef6;
+  color: #3a4a61;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 @media (max-width: 1000px) {

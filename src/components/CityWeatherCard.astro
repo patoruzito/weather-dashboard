@@ -19,10 +19,10 @@ const { cardIndex = 0, defaultCityId = "" } = Astro.props;
         </option>
       ))}
     </select>
-    <span class="badge">
-      <span class="badge-label">Condition</span>
-      <span data-condition>--</span>
-    </span>
+    <div class="badge-group">
+      <span class="badge badge-status" data-cache-badge>--</span>
+      <span class="badge badge-updated" data-updated-badge>Updated --</span>
+    </div>
   </header>
 
   <div class="card-main">
@@ -45,8 +45,8 @@ const { cardIndex = 0, defaultCityId = "" } = Astro.props;
         <span data-wind>-- km/h</span>
       </div>
       <div class="meta-row">
-        <span class="label">Extra</span>
-        <span data-extra>--</span>
+        <span class="label">Condition</span>
+        <span data-condition>--</span>
       </div>
     </div>
   </div>
