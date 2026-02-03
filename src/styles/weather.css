@@ -1,0 +1,118 @@
+.weather-page {
+  min-height: 100vh;
+  margin: 0;
+  background: #f3f6fb;
+  color: #1a2230;
+  font-family: "Sora", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+main {
+  padding: 32px;
+}
+
+.weather-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: #4b5d75;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.weather-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(22, 42, 69, 0.12);
+  display: grid;
+  gap: 16px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.city-select {
+  flex: 1;
+  border: 1px solid #d6dfeb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  background: #f8fafc;
+}
+
+.card-main {
+  display: grid;
+  gap: 16px;
+}
+
+.temp {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #1f2c46;
+}
+
+.meta {
+  display: grid;
+  gap: 8px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #4b5d75;
+}
+
+.label {
+  font-weight: 600;
+  color: #1f2c46;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #0f63ff;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 1000px) {
+  .weather-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 20px;
+  }
+
+  .weather-grid {
+    grid-template-columns: 1fr;
+  }
+}

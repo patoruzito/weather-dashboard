@@ -1,0 +1,53 @@
+---
+import { cities } from "../lib/data/cities";
+
+type Props = {
+  cardIndex?: number;
+  defaultCityId?: string;
+};
+
+const { cardIndex = 0, defaultCityId = "" } = Astro.props;
+---
+
+<article class="weather-card" data-city-card data-card-index={cardIndex}>
+  <header class="card-header">
+    <select class="city-select" data-city-select>
+      <option value="">Select city</option>
+      {cities.map((city) => (
+        <option value={city.id} selected={city.id === defaultCityId}>
+          {city.name}, {city.country}
+        </option>
+      ))}
+    </select>
+    <span class="badge">
+      <span class="badge-label">Condition</span>
+      <span data-condition>--</span>
+    </span>
+  </header>
+
+  <div class="card-main">
+    <div class="temp" data-temp>--°</div>
+    <div class="meta">
+      <div class="meta-row">
+        <span class="label">Humidity</span>
+        <span data-humidity>--%</span>
+      </div>
+      <div class="meta-row">
+        <span class="label">Pressure</span>
+        <span data-pressure>---- hPa</span>
+      </div>
+      <div class="meta-row">
+        <span class="label">Local time</span>
+        <span data-local-time>--:--</span>
+      </div>
+      <div class="meta-row">
+        <span class="label">Wind</span>
+        <span data-wind>-- km/h</span>
+      </div>
+      <div class="meta-row">
+        <span class="label">Extra</span>
+        <span data-extra>--</span>
+      </div>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,21 @@
+---
+import CityWeatherCard from "./CityWeatherCard.astro";
+
+const cards = Array.from({ length: 6 }, (_, index) => ({
+  id: `card-${index + 1}`,
+  index,
+}));
+---
+
+<section class="weather-dashboard">
+  <header class="dashboard-header">
+    <h1>Weather Dashboard</h1>
+    <p>Pick a city on each card to compare current conditions.</p>
+  </header>
+
+  <div class="weather-grid" data-weather-grid>
+    {cards.map((card) => (
+      <CityWeatherCard cardIndex={card.index} />
+    ))}
+  </div>
+</section>
