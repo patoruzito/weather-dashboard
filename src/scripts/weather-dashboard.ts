@@ -38,6 +38,8 @@ type CardState = {
   localTime: HTMLElement;
   wind: HTMLElement;
   condition: HTMLElement;
+  errorRow: HTMLElement;
+  errorMessage: HTMLElement;
   cacheBadge: HTMLElement;
   updatedBadge: HTMLElement;
   lastUpdatedAt?: number;
@@ -134,6 +136,8 @@ const clearCard = (state: CardState): void => {
   state.localTime.textContent = "--:--";
   state.wind.textContent = "-- km/h";
   state.condition.textContent = "--";
+  state.errorRow.hidden = true;
+  state.errorMessage.textContent = "--";
   state.lastUpdatedAt = undefined;
   setStatusBadge(state, "idle");
   setUpdatedBadge(state, null);
@@ -147,6 +151,8 @@ const updateCard = (state: CardState, payload: ApiOk): void => {
   state.localTime.textContent = formatLocalTime(weather.localTime);
   state.wind.textContent = `${Math.round(weather.windKph)} km/h ${weather.windDir}`;
   state.condition.textContent = weather.condition;
+  state.errorRow.hidden = true;
+  state.errorMessage.textContent = "--";
   state.lastUpdatedAt = Date.parse(weather.updatedAt);
   const deltaSeconds = Math.max(
     0,
@@ -162,7 +168,10 @@ const updateError = (state: CardState, message?: string): void => {
   state.pressure.textContent = "---- hPa";
   state.localTime.textContent = "--:--";
   state.wind.textContent = "-- km/h";
-  state.condition.textContent = message ? `Error: ${message}` : "Unavailable";
+  state.condition.textContent = "--";
+  const safeMessage = message?.trim();
+  state.errorRow.hidden = false;
+  state.errorMessage.textContent = safeMessage || "Weather unavailable";
   state.lastUpdatedAt = undefined;
   setStatusBadge(state, "error");
   setUpdatedBadge(state, null);
@@ -225,6 +234,8 @@ const buildCardState = (
   const localTime = query<HTMLElement>(card, "[data-local-time]");
   const wind = query<HTMLElement>(card, "[data-wind]");
   const condition = query<HTMLElement>(card, "[data-condition]");
+  const errorRow = query<HTMLElement>(card, "[data-error-row]");
+  const errorMessage = query<HTMLElement>(card, "[data-error-message]");
   const cacheBadge = query<HTMLElement>(card, "[data-cache-badge]");
   const updatedBadge = query<HTMLElement>(card, "[data-updated-badge]");
 
@@ -236,6 +247,8 @@ const buildCardState = (
     !localTime ||
     !wind ||
     !condition ||
+    !errorRow ||
+    !errorMessage ||
     !cacheBadge ||
     !updatedBadge
   ) {
@@ -255,6 +268,8 @@ const buildCardState = (
     localTime,
     wind,
     condition,
+    errorRow,
+    errorMessage,
     cacheBadge,
     updatedBadge,
   };

@@ -91,6 +91,22 @@ main {
   color: #4b5d75;
 }
 
+.meta-row-error {
+  align-items: flex-start;
+  color: #c92a2a;
+  font-size: 0.9rem;
+}
+
+.meta-row-error .label {
+  color: #c92a2a;
+}
+
+.meta-row-error [data-error-message] {
+  max-width: 65%;
+  text-align: right;
+  word-break: break-word;
+}
+
 .label {
   font-weight: 600;
   color: #1f2c46;

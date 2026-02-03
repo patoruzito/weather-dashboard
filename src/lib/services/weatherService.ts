@@ -3,75 +3,64 @@ import { assertWeatherCard, type WeatherCard } from "../schemas/weather";
 
 import { fetchCurrentByCoords } from "./openMeteo";
 
-const COMPASS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+const COMPASS = [
+  "N",
+  "NNE",
+  "NE",
+  "ENE",
+  "E",
+  "ESE",
+  "SE",
+  "SSE",
+  "S",
+  "SSW",
+  "SW",
+  "WSW",
+  "W",
+  "WNW",
+  "NW",
+  "NNW",
+];
 
 const toWindDir = (degrees: number): string => {
   const normalized = ((degrees % 360) + 360) % 360;
-  const index = Math.round(normalized / 45) % 8;
+  const index = Math.round(normalized / 22.5) % 16;
   return COMPASS[index];
 };
 
+const WEATHER_CODE_LABELS: Record<number, string> = {
+  0: "Clear sky",
+  1: "Mostly clear",
+  2: "Partly cloudy",
+  3: "Overcast",
+  45: "Fog",
+  48: "Freezing fog",
+  51: "Light drizzle",
+  53: "Moderate drizzle",
+  55: "Dense drizzle",
+  56: "Light freezing drizzle",
+  57: "Dense freezing drizzle",
+  61: "Light rain",
+  63: "Moderate rain",
+  65: "Heavy rain",
+  66: "Light freezing rain",
+  67: "Heavy freezing rain",
+  71: "Light snow",
+  73: "Moderate snow",
+  75: "Heavy snow",
+  77: "Snow grains",
+  80: "Light rain showers",
+  81: "Moderate rain showers",
+  82: "Intense rain showers",
+  85: "Light snow showers",
+  86: "Heavy snow showers",
+  95: "Thunderstorm",
+  96: "Thunderstorm with hail",
+  99: "Thunderstorm with heavy hail",
+};
+
 const weatherCodeLabel = (code: number): string => {
-  switch (code) {
-    case 0:
-      return "Clear sky";
-    case 1:
-      return "Mainly clear";
-    case 2:
-      return "Partly cloudy";
-    case 3:
-      return "Overcast";
-    case 45:
-      return "Fog";
-    case 48:
-      return "Rime fog";
-    case 51:
-      return "Light drizzle";
-    case 53:
-      return "Moderate drizzle";
-    case 55:
-      return "Dense drizzle";
-    case 56:
-      return "Light freezing drizzle";
-    case 57:
-      return "Dense freezing drizzle";
-    case 61:
-      return "Light rain";
-    case 63:
-      return "Moderate rain";
-    case 65:
-      return "Heavy rain";
-    case 66:
-      return "Light freezing rain";
-    case 67:
-      return "Heavy freezing rain";
-    case 71:
-      return "Light snow";
-    case 73:
-      return "Moderate snow";
-    case 75:
-      return "Heavy snow";
-    case 77:
-      return "Snow grains";
-    case 80:
-      return "Light rain showers";
-    case 81:
-      return "Moderate rain showers";
-    case 82:
-      return "Violent rain showers";
-    case 85:
-      return "Light snow showers";
-    case 86:
-      return "Heavy snow showers";
-    case 95:
-      return "Thunderstorm";
-    case 96:
-      return "Thunderstorm with hail";
-    case 99:
-      return "Thunderstorm with heavy hail";
-    default:
-      return "Unknown";
-  }
+  return WEATHER_CODE_LABELS[code] ?? `Unknown (${code})`;
 };
 
 export const getCurrent = async (city: City): Promise<WeatherCard> => {
