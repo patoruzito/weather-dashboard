@@ -8,7 +8,7 @@ export type City = {
 };
 
 export const cities: City[] = [
-  { id: "nyc", name: "New York", country: "US", lat: 40.7128, lon: -74.006, tz: "America/New_York" },
+  { id: "nyc", name: "New York City", country: "US", lat: 40.7128, lon: -74.006, tz: "America/New_York" },
   { id: "lax", name: "Los Angeles", country: "US", lat: 34.0522, lon: -118.2437, tz: "America/Los_Angeles" },
   { id: "chi", name: "Chicago", country: "US", lat: 41.8781, lon: -87.6298, tz: "America/Chicago" },
   { id: "mia", name: "Miami", country: "US", lat: 25.7617, lon: -80.1918, tz: "America/New_York" },
@@ -28,4 +28,6 @@ export const cities: City[] = [
   { id: "sin", name: "Singapore", country: "SG", lat: 1.3521, lon: 103.8198, tz: "Asia/Singapore" },
   { id: "syd", name: "Sydney", country: "AU", lat: -33.8688, lon: 151.2093, tz: "Australia/Sydney" },
   { id: "bue", name: "Buenos Aires", country: "AR", lat: -34.6037, lon: -58.3816, tz: "America/Argentina/Buenos_Aires" },
+  { id: "mex", name: "Mexico City", country: "MX", lat: 19.4326, lon: -99.1332, tz: "America/Mexico_City" },
+  { id: "sao", name: "São Paulo", country: "BR", lat: -23.5505, lon: -46.6333, tz: "America/Sao_Paulo" },
 ];

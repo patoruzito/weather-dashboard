@@ -1,9 +1,12 @@
 ---
 import CityWeatherCard from "./CityWeatherCard.astro";
 
+const defaultCityIds = ["bue", "sao", "mex", "mad", "nyc", "tyo"];
+
 const cards = Array.from({ length: 6 }, (_, index) => ({
   id: `card-${index + 1}`,
   index,
+  defaultCityId: defaultCityIds[index] ?? "",
 }));
 ---
 
@@ -15,7 +18,10 @@ const cards = Array.from({ length: 6 }, (_, index) => ({
 
   <div class="weather-grid" data-weather-grid>
     {cards.map((card) => (
-      <CityWeatherCard cardIndex={card.index} />
+      <CityWeatherCard
+        cardIndex={card.index}
+        defaultCityId={card.defaultCityId}
+      />
     ))}
   </div>
 </section>
