@@ -1,59 +1,8 @@
-type WeatherCard = {
-  tempC: number;
-  humidityPct: number;
-  pressureHpa: number;
-  windKph: number;
-  windDir: string;
-  condition: string;
-  localTime: string;
-  updatedAt: string;
-};
-
-type ApiOk = {
-  ok: true;
-  cityId: string;
-  weather: WeatherCard;
-  meta: {
-    cached: boolean;
-    ttlSeconds: number;
-  };
-};
-
-type ApiFail = {
-  ok: false;
-  error: {
-    message: string;
-    code?: string;
-  };
-};
-
-type CardState = {
-  card: HTMLElement;
-  index: string;
-  storageKey: string;
-  select: HTMLSelectElement;
-  temp: HTMLElement;
-  humidity: HTMLElement;
-  pressure: HTMLElement;
-  localTime: HTMLElement;
-  wind: HTMLElement;
-  condition: HTMLElement;
-  errorRow: HTMLElement;
-  errorMessage: HTMLElement;
-  cacheBadge: HTMLElement;
-  updatedBadge: HTMLElement;
-  lastUpdatedAt?: number;
-  currentCityId?: string;
-  inflight?: AbortController;
-};
-
-type StatusState = "idle" | "loading" | "live" | "cached" | "error";
-
 const STORAGE_PREFIX = "weather-dashboard:card:";
 const REFRESH_INTERVAL_MS = 90_000;
 const UPDATED_TICK_MS = 1_000;
 
-const statusLabels: Record<StatusState, string> = {
+const statusLabels = {
   idle: "--",
   loading: "Loading",
   live: "Live",
@@ -61,10 +10,9 @@ const statusLabels: Record<StatusState, string> = {
   error: "Error",
 };
 
-const query = <T extends Element>(root: ParentNode, selector: string): T | null =>
-  root.querySelector<T>(selector);
+const query = (root, selector) => root.querySelector(selector);
 
-const safeStorageGet = (key: string): string => {
+const safeStorageGet = (key) => {
   try {
     return localStorage.getItem(key) ?? "";
   } catch {
@@ -72,7 +20,7 @@ const safeStorageGet = (key: string): string => {
   }
 };
 
-const safeStorageSet = (key: string, value: string): void => {
+const safeStorageSet = (key, value) => {
   try {
     localStorage.setItem(key, value);
   } catch {
@@ -80,7 +28,7 @@ const safeStorageSet = (key: string, value: string): void => {
   }
 };
 
-const safeStorageRemove = (key: string): void => {
+const safeStorageRemove = (key) => {
   try {
     localStorage.removeItem(key);
   } catch {
@@ -88,7 +36,7 @@ const safeStorageRemove = (key: string): void => {
   }
 };
 
-const formatLocalTime = (value: string): string => {
+const formatLocalTime = (value) => {
   if (!value) {
     return "--:--";
   }
@@ -99,10 +47,9 @@ const formatLocalTime = (value: string): string => {
   return value;
 };
 
-const formatNumber = (value: number, unit: string): string =>
-  `${Math.round(value)}${unit}`;
+const formatNumber = (value, unit) => `${Math.round(value)}${unit}`;
 
-const setStatusBadge = (state: CardState, status: StatusState): void => {
+const setStatusBadge = (state, status) => {
   state.cacheBadge.textContent = statusLabels[status];
   state.cacheBadge.classList.remove(
     "is-live",
@@ -121,7 +68,7 @@ const setStatusBadge = (state: CardState, status: StatusState): void => {
   }
 };
 
-const setUpdatedBadge = (state: CardState, seconds: number | null): void => {
+const setUpdatedBadge = (state, seconds) => {
   if (seconds === null || Number.isNaN(seconds)) {
     state.updatedBadge.textContent = "Updated --";
     return;
@@ -129,7 +76,7 @@ const setUpdatedBadge = (state: CardState, seconds: number | null): void => {
   state.updatedBadge.textContent = `Updated ${seconds}s ago`;
 };
 
-const clearCard = (state: CardState): void => {
+const clearCard = (state) => {
   state.temp.textContent = "--°C";
   state.humidity.textContent = "--%";
   state.pressure.textContent = "---- hPa";
@@ -143,7 +90,7 @@ const clearCard = (state: CardState): void => {
   setUpdatedBadge(state, null);
 };
 
-const updateCard = (state: CardState, payload: ApiOk): void => {
+const updateCard = (state, payload) => {
   const { weather, meta } = payload;
   state.temp.textContent = `${Math.round(weather.tempC)}°C`;
   state.humidity.textContent = formatNumber(weather.humidityPct, "%");
@@ -162,7 +109,7 @@ const updateCard = (state: CardState, payload: ApiOk): void => {
   setStatusBadge(state, meta.cached ? "cached" : "live");
 };
 
-const updateError = (state: CardState, message?: string): void => {
+const updateError = (state, message) => {
   state.temp.textContent = "--°C";
   state.humidity.textContent = "--%";
   state.pressure.textContent = "---- hPa";
@@ -177,7 +124,7 @@ const updateError = (state: CardState, message?: string): void => {
   setUpdatedBadge(state, null);
 };
 
-const fetchWeather = async (state: CardState, cityId: string): Promise<void> => {
+const fetchWeather = async (state, cityId) => {
   if (!cityId) {
     clearCard(state);
     return;
@@ -200,7 +147,7 @@ const fetchWeather = async (state: CardState, cityId: string): Promise<void> => 
       { signal: controller.signal }
     );
 
-    const payload = (await response.json()) as ApiOk | ApiFail;
+    const payload = await response.json();
     if (!payload.ok) {
       updateError(state, payload.error?.message);
       return;
@@ -223,21 +170,18 @@ const fetchWeather = async (state: CardState, cityId: string): Promise<void> => 
   }
 };
 
-const buildCardState = (
-  card: HTMLElement,
-  fallbackIndex: number
-): CardState | null => {
-  const select = query<HTMLSelectElement>(card, "[data-city-select]");
-  const temp = query<HTMLElement>(card, "[data-temp]");
-  const humidity = query<HTMLElement>(card, "[data-humidity]");
-  const pressure = query<HTMLElement>(card, "[data-pressure]");
-  const localTime = query<HTMLElement>(card, "[data-local-time]");
-  const wind = query<HTMLElement>(card, "[data-wind]");
-  const condition = query<HTMLElement>(card, "[data-condition]");
-  const errorRow = query<HTMLElement>(card, "[data-error-row]");
-  const errorMessage = query<HTMLElement>(card, "[data-error-message]");
-  const cacheBadge = query<HTMLElement>(card, "[data-cache-badge]");
-  const updatedBadge = query<HTMLElement>(card, "[data-updated-badge]");
+const buildCardState = (card, fallbackIndex) => {
+  const select = query(card, "[data-city-select]");
+  const temp = query(card, "[data-temp]");
+  const humidity = query(card, "[data-humidity]");
+  const pressure = query(card, "[data-pressure]");
+  const localTime = query(card, "[data-local-time]");
+  const wind = query(card, "[data-wind]");
+  const condition = query(card, "[data-condition]");
+  const errorRow = query(card, "[data-error-row]");
+  const errorMessage = query(card, "[data-error-message]");
+  const cacheBadge = query(card, "[data-cache-badge]");
+  const updatedBadge = query(card, "[data-updated-badge]");
 
   if (
     !select ||
@@ -275,7 +219,7 @@ const buildCardState = (
   };
 };
 
-const tickUpdatedBadges = (cards: CardState[]): void => {
+const tickUpdatedBadges = (cards) => {
   const now = Date.now();
   cards.forEach((state) => {
     if (!state.lastUpdatedAt) {
@@ -289,9 +233,9 @@ const tickUpdatedBadges = (cards: CardState[]): void => {
   });
 };
 
-const initWeatherDashboard = (): void => {
+const initWeatherDashboard = () => {
   const cardNodes = Array.from(
-    document.querySelectorAll<HTMLElement>("[data-city-card]")
+    document.querySelectorAll("[data-city-card]")
   );
   if (!cardNodes.length) {
     return;
@@ -299,7 +243,7 @@ const initWeatherDashboard = (): void => {
 
   const cards = cardNodes
     .map((card, index) => buildCardState(card, index))
-    .filter((card): card is CardState => Boolean(card));
+    .filter(Boolean);
 
   if (!cards.length) {
     return;
