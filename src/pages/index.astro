@@ -6,19 +6,19 @@ if (Astro.request) {
 }
 ---
 
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="refresh" content={`0; url=${destination}`} />
-		<title>Redirecting…</title>
+		<title>Redirigiendo…</title>
 		<script is:inline>
 			window.location.replace({JSON.stringify(destination)});
 		</script>
 	</head>
 	<body>
 		<p>
-			Redirecting to <a href={destination}>{destination}</a>.
+			Redirigiendo a <a href={destination}>{destination}</a>.
 		</p>
 	</body>
 </html>
