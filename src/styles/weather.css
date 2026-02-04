@@ -21,11 +21,13 @@ main {
   margin: 0 0 8px;
   font-size: 2rem;
   letter-spacing: -0.02em;
+  text-align: center;
 }
 
 .dashboard-header p {
   margin: 0;
   color: #4b5d75;
+  text-align: center;
 }
 
 .weather-grid {
