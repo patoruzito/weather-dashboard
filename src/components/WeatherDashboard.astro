@@ -1,5 +1,6 @@
 ---
 import CityWeatherCard from "./CityWeatherCard.astro";
+import weatherDashboardScript from "../scripts/weather-dashboard.ts?url";
 
 const defaultCityIds = ["bue", "sao", "mex", "mad", "nyc", "tyo"];
 
@@ -26,7 +27,4 @@ const cards = Array.from({ length: 6 }, (_, index) => ({
   </div>
 </section>
 
-<script
-  type="module"
-  src={Astro.resolve("../scripts/weather-dashboard.ts")}
-></script>
+<script type="module" src={weatherDashboardScript}></script>
