@@ -97,6 +97,7 @@ main {
   align-items: flex-start;
   color: #c92a2a;
   font-size: 0.9rem;
+  padding-right: 16px;
 }
 
 .meta-row-error .label {
@@ -107,6 +108,7 @@ main {
   max-width: 65%;
   text-align: right;
   word-break: break-word;
+  padding-right: 12px;
 }
 
 .label {
