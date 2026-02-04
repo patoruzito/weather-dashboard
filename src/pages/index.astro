@@ -12,8 +12,8 @@ if (Astro.request) {
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="refresh" content={`0; url=${destination}`} />
 		<title>Redirigiendo…</title>
-		<script is:inline>
-			window.location.replace({JSON.stringify(destination)});
+		<script is:inline define:vars={{ destination }}>
+			window.location.replace(destination);
 		</script>
 	</head>
 	<body>
